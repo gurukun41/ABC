@@ -37,18 +37,36 @@ bool chmin(T &a, const T& b) {
   return false;
 }
 int main(){
-    ll N; cin >> N;
-    ll  tp=0,tn;
-    ll sumv = 0;
-    rep(i,0,N){
-      ll t,v;cin >> t >> v;
-      tn = t;
-      sumv -= tn-tp;
-      if(sumv<0){
-        sumv = 0;
+    ll H,W,D;cin >> H >>W >>D;
+    vector<pair<ll,ll>> ms(0);
+    rep(i,0,H){
+      rep(j,0,W){
+        char s;cin >> s;
+        if(s == '.'){
+          pair<ll,ll> p=make_pair(i,j);
+          ms.push_back(p);
+        }
       }
-      sumv += v;
-      tp = t;
     }
-  cout << sumv << "\n";
+    ll ans =0;
+
+    for(auto p1 :ms){
+      for(auto p2 :ms){
+        if(p1 == p2){
+          continue;
+        }
+        ll num = 0;
+        for(auto p :ms){
+          ll d1 = abs(p.first-p1.first) + abs(p.second-p1.second);
+          ll d2 = abs(p.first-p2.first) + abs(p.second-p2.second);
+          if(d1 <= D || d2 <= D){
+            num ++;
+          }
+        }
+        if (num > ans){
+          ans = num;
+        }
+      }
+    }
+    cout << ans << "\n";
 }
