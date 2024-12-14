@@ -37,5 +37,28 @@ bool chmin(T &a, const T& b) {
   return false;
 }
 int main(){
-    
+    ll N,S;cin >> N >> S;
+    vl A(2*N);
+    ll sum=0;
+    rep(i,0,N){
+      ll a; cin >> a;
+      sum+=a;
+      A[i] = sum;
+    }
+    rep(i,N,2*N){
+      A[i] = sum + A[i-N];
+    }
+  S%=sum;
+  set<ll> B;
+  for(auto a: A){
+    B.insert(a);
+  }
+  for(auto p: B){
+    if(B.contains(p+S)){
+      cout << "Yes" << "\n";
+      return 0;
+    }
+  }
+  cout << "No" << "\n";
+
 }

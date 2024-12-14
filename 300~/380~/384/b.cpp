@@ -37,5 +37,19 @@ bool chmin(T &a, const T& b) {
   return false;
 }
 int main(){
-    
+    ll N,R;cin >> N >> R;
+    rep(i,0,N){
+      ll D, A;cin >> D >> A;
+      if(D==1){
+        if(1600<=R && R<=2799){
+          R+=A;
+        }
+      }
+      else{
+        if(1200<=R && R<=2399){
+          R+=A;
+        }
+      }
+    }
+    cout << R << "\n";
 }

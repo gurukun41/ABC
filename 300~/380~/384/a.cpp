@@ -37,5 +37,14 @@ bool chmin(T &a, const T& b) {
   return false;
 }
 int main(){
-    
+    ll N;cin>>N;
+    char c1, c2;cin >> c1 >> c2;
+    string S; cin >> S;
+    ll len = S.size();
+    rep(i,0,len){
+      if(S[i] != c1){
+        S[i] = c2;
+      }
+    }
+    cout << S << "\n";
 }
