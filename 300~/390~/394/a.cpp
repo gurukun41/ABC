@@ -36,5 +36,15 @@ bool chmin(T &a, const T& b){
     return false;
 }
 int main(){
-
+    string S; cin >> S;
+    int num=0;
+    rep(i,0,S.size()){
+        if(S[i] == '2'){
+            num++;
+        }
+    }
+    rep(i,0,num){
+        cout << '2';
+    }
+    cout << "\n";
 }

@@ -36,5 +36,24 @@ bool chmin(T &a, const T& b){
     return false;
 }
 int main(){
-
+    string S;cin >> S;
+    int i = 0;
+    while(i<S.size()){
+        if(S[i] == 'W'){
+            i++;
+            if(i<S.size()){
+                if(S[i] == 'A'){
+                    S[i-1] = 'A',S[i]='C';
+                    i-=2;
+                    if(i<0){
+                        i=0;
+                    }
+                }
+            }
+        }
+        else{
+            i++;
+        }
+    }
+    cout << S << "\n";
 }

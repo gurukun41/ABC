@@ -36,5 +36,28 @@ bool chmin(T &a, const T& b){
     return false;
 }
 int main(){
+    string S;cin >> S;int N=S.size();
+    stack<char> st;
+    rep(i,0,N){
+        if(S[i] == '(' || S[i] == '[' || S[i]== '<'){
+            st.push(S[i]);
+        }
+        else{
+            bool flag = false;
+            if(st.empty()){
+                flag=true;
+            }
 
+            if(S[i] == ')' && st.top() != '(' )flag = true;
+            if(S[i] == '>' && st.top() != '<' )flag = true;
+            if(S[i] == ']' && st.top() != '[' )flag = true;
+            if(flag){
+                cout << "No" << "\n";
+                return 0;
+            }
+            st.pop();
+        }
+    }
+    if(st.empty())cout << "Yes" << "\n";
+    else cout << "No" << "\n";
 }

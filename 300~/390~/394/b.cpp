@@ -36,5 +36,15 @@ bool chmin(T &a, const T& b){
     return false;
 }
 int main(){
-
+    int N;cin >> N;
+    vector<pair<int,string>> S(N);
+    rep(i,0,N){
+        string s;cin >> s;
+        S[i] = make_pair(s.size(),s);
+    }
+    sort(S.begin(),S.end());
+    rep(i,0,N){
+        cout << S[i].second;
+    }
+    cout << "\n";
 }
