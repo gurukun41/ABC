@@ -38,5 +38,14 @@ inline bool chmin(T &a, const T& b){
 // 無限大の値
 const long long INF = 1LL << 60;
 int main(){
-
+    int N; cin >> N;
+    vl h(N);rep(i,0,N) cin >> h[i];
+    vl dp(N,INF);
+    dp[0] = 0;
+    dp[1] = abs(h[1]-h[0]);
+    rep(i,2,N){
+        chmin(dp[i], dp[i-1] + abs(h[i] - h[i-1]));
+        chmin(dp[i], dp[i-2] + abs(h[i] - h[i-2]));
+    }
+    cout << dp[N-1] << "\n";
 }

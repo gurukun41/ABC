@@ -37,6 +37,26 @@ inline bool chmin(T &a, const T& b){
 }
 // 無限大の値
 const long long INF = 1LL << 60;
-int main(){
+ll h[100001][3];
+//DP　テーブル
+ll dp[100001][3];
 
+int main(){
+    int N; cin >> N;
+    rep(i,0,N) cin >> h[i][0] >> h[i][1] >> h[i][2];
+    rep(i,0,100001) rep(j,0,3) dp[i][j] = -INF;
+    rep(i,0,3){
+        dp[0][i] = h[0][i];
+    }
+    rep(i,0,N){
+        rep(j,0,3){
+            rep(k, 0, 3){
+                if(j != k){
+                    chmax(dp[i+1][j], dp[i][k] + h[i+1][j]);
+                }
+            }
+        }
+    }
+    
+    cout << max(dp[N-1][0],max(dp[N-1][1],dp[N-1][2])) << "\n";
 }

@@ -37,6 +37,29 @@ inline bool chmin(T &a, const T& b){
 }
 // 無限大の値
 const long long INF = 1LL << 60;
-int main(){
+ll w[110];
+ll v[110];
+//DP　テーブル
+ll dp[110][100100];
 
+int main(){
+    ll N,W; cin >> N >> W;
+    rep(i,0,N) cin >> w[i] >> v[i];
+    rep(i,0,110) rep(j,0,100100) dp[i][j] = INF;
+    dp[0][0] = 0;
+    ll ans = 0;
+    rep(i,0,N){
+        rep(j,0,100100){
+            if(dp[i][j] == INF||j+v[i]>=100100) continue;
+            chmin(dp[i+1][j+v[i]], dp[i][j] + w[i]);
+            if(dp[i+1][j+v[i]] <= W){
+                chmax(ans, j+v[i]);
+            }
+            chmin(dp[i+1][j], dp[i][j]);
+            
+              
+        }
+    }
+
+    cout << ans << "\n";
 }
