@@ -36,6 +36,19 @@ inline bool chmin(T &a, const T& b){
     return false;
 }
 // 無限大の値
+//素数判定
+bool is_prime(long long n) {
+    if (n <= 1) {
+      return false;
+    }
+    for (long long i = 2; i * i <= n; i++) {
+      if (n % i == 0) {
+        return false;
+      }
+    }
+    return true;
+}
+
 const long long INF = 1LL << 60;
 int main(){
 
