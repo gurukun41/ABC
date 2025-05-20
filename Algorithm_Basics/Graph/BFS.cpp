@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+//幅優先探索
 int main(){
     int n, m;cin >> n >> m;
 
@@ -9,11 +10,10 @@ int main(){
     for(int i = 0; i < m; i++){
         int u, v;
         cin >> u >> v;
-        u--; // 1-indexedは0-indexedにしたほうが扱いやすい
+        u--;
         v--;
         g[u].push_back(v);
         
-        // 無向辺なら逆向きも追加
         g[v].push_back(u);
     }
 

@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+//ラムダ再帰
 int main(){
     int N; cin >> N;
     vector<int> A(N);

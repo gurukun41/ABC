@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+//ビット全探索
 int main(){
     int n, k; cin >> n >> k;
     vector<int> a(n);

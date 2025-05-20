@@ -2,6 +2,8 @@
 using namespace std;
 using ll = long long;
 
+//累積和
+
 vector<ll> A(10000);
 vector<ll> S(10000);
 int N;

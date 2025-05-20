@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+//幅優先探索　枝刈り
 int main(){
     int n, m;cin >> n >> m;
 
