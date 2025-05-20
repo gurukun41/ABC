@@ -1,5 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
+
+//辞書順列挙
 int main(){
     int n; cin >> n;
     vector<int> a(n), p(n);

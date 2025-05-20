@@ -3,6 +3,7 @@ using namespace std;
 
 using ll = long long;
 
+//ダイクストラ法
 int main(){
     int n, m; cin >> n >> m;
     vector<vector<pair<int,ll>>> g(n);

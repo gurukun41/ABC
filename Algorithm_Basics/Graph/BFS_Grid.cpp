@@ -1,6 +1,7 @@
 #include<bits/stdc++.h>
 using namespace std;
 
+//幅優先探索 グリッド
 int main(){
     int h, w;
     cin >> h >> w;
