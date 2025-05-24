@@ -51,5 +51,5 @@ bool is_prime(long long n) {
 
 const long long INF = 1LL << 60;
 int main(){
-
+    int N;
 }
