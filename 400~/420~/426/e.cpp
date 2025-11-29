@@ -19,6 +19,8 @@ using pl = pair<ll, ll>;                                 // long long型のペ�
 using vpl = vector<pl>;                                  // long long型のペアの一次元配列
 #define rep(i, a, b) for (ll i = (a); i < (ll)(b); i++)  // for文の短縮
 #define all(v) v.begin(), v.end()                        // all(v)でvの始まりと終わりのイテレーター
+#define x first
+#define y second
 
 // 無限大の値
 const long long INF = 1LL << 60;
@@ -72,45 +74,7 @@ bool is_prime(long long n) {
     return true;
 }
 
-struct SegmentTree_Min {
-   private:
-    ll size = 1;
-    vl node;
-    ll init_value = INF;
-
-   public:
-    SegmentTree_Min(vl v) {
-        ll sz = v.size();
-        while (size < sz) size *= 2;
-        node.resize(2 * size - 1, init_value);
-        rep(i, 0, sz) node[i + size - 1] = v[i];
-        for (ll i = size - 2; i >= 0; i--) {
-            node[i] = min(node[2 * i + 1], node[2 * i + 2]);
-        }
-    }
-
-    void update(ll i, ll val) {
-        i += size - 1;
-        node[i] = val;
-        while (i > 0) {
-            i = (i - 1) / 2;
-            node[i] = min(node[2 * i + 1], node[2 * i + 2]);
-        }
-    }
-
-    ll query(ll a, ll b, ll k = 0, ll l = 0, ll r = -1) {
-        if (r < 0) r = size;
-        if (r <= a || b <= l) return INF;
-        if (a <= l && r <= b)
-            return node[k];
-        else {
-            ll vl = query(a, b, 2 * k + 1, l, (l + r) / 2);
-            ll vr = query(a, b, 2 * k + 2, (l + r) / 2, r);
-            return min(vl, vr);
-        }
-    }
-};
-
+// 遅延セグメント木(和)
 struct LazySegmentTree_Sum {
    private:
     ll size = 1;
@@ -119,6 +83,7 @@ struct LazySegmentTree_Sum {
     ll init_value = 0;
 
    public:
+    // 配列を指定して初期化
     LazySegmentTree_Sum(vl v) {
         ll sz = v.size();
         while (size < sz) size *= 2;
@@ -129,6 +94,8 @@ struct LazySegmentTree_Sum {
             node[i] = node[2 * i + 1] + node[2 * i + 2];
         }
     }
+    // サイズのみ指定
+    LazySegmentTree_Sum(ll n) : LazySegmentTree_Sum(vl(n, 0)) {}
 
     void eval(ll k, ll l, ll r) {
         if (lazy[k] != 0) {
@@ -141,6 +108,7 @@ struct LazySegmentTree_Sum {
         }
     }
 
+    // 区間[a, b)にvalを加算
     void update(ll a, ll b, ll val, ll k = 0, ll l = 0, ll r = -1) {
         if (r < 0) r = size;
         eval(k, l, r);
@@ -155,6 +123,7 @@ struct LazySegmentTree_Sum {
         }
     }
 
+    // 区間[a, b)の和を取得
     ll query(ll a, ll b, ll k = 0, ll l = 0, ll r = -1) {
         if (r < 0) r = size;
 
@@ -163,12 +132,13 @@ struct LazySegmentTree_Sum {
         if (r <= a || b <= l) return 0;
         if (a <= l && r <= b) return node[k];
 
-        int vl = query(a, b, 2 * k + 1, l, (l + r) / 2);
-        int vr = query(a, b, 2 * k + 2, (l + r) / 2, r);
+        ll vl = query(a, b, 2 * k + 1, l, (l + r) / 2);
+        ll vr = query(a, b, 2 * k + 2, (l + r) / 2, r);
         return vl + vr;
     }
 };
 
+// 遅延セグメント木(最小値)
 struct LazySegmentTree_Min {
    private:
     ll size = 1;
@@ -190,8 +160,9 @@ struct LazySegmentTree_Min {
             node[i] = min(node[2 * i + 1], node[2 * i + 2]);
         }
     }
+    LazySegmentTree_Min(ll n) : LazySegmentTree_Min(vl(n, INF)) {}
 
-    void eval(int k, int l, int r) {
+    void eval(ll k, ll l, ll r) {
         if (lazyFlag[k]) {
             node[k] = lazy[k];
             if (r - l > 1) {
@@ -233,107 +204,67 @@ struct LazySegmentTree_Min {
     }
 };
 
-struct LazySegmentTree {
-   private:
-    ll size = 1;
-    vector<vector<mint>> node;
-    vector<vector<mint>> lazy;
-    mint init_value = 0;
-
-   public:
-    LazySegmentTree(vector<pair<mint,mint>> v) {
-        ll sz = v.size();
-        while (size < sz) size *= 2;
-        node.resize(2 * size - 1, {init_value, init_value, init_value});
-        lazy.resize(2 * size - 1, {init_value, init_value, init_value});
-        rep(i, 0, sz) node[i + size - 1] = {v[i].first * v[i].second, v[i].first, v[i].second};
-        for (ll i = size - 2; i >= 0; i--) {
-            node[i][0] = node[2 * i + 1][0] + node[2 * i + 2][0];
-            node[i][1] = node[2 * i + 1][1] + node[2 * i + 2][1];
-            node[i][2] = node[2 * i + 1][2] + node[2 * i + 2][2];
-        }
-    }
-
-    void eval(ll k, ll l, ll r) {
-        mint len = r - l;
-        node[k][0] += lazy[k][1] * node[k][2] + lazy[k][2] * node[k][1] + lazy[k][1] * lazy[k][2] * len;
-        if (lazy[k][1] != 0) {
-            node[k][1] += lazy[k][1] * len;
-            if (r - l > 1) {
-                lazy[2 * k + 1][1] += lazy[k][1];
-                lazy[2 * k + 2][1] += lazy[k][1];
+int main(){
+    ll T;cin >> T;
+    vector<ld> ans(T);
+    rep(_,0,T){
+        pair<ld,ld> TS,TG;cin >> TS.x >> TS.y >> TG.x >> TG.y;
+        pair<ld,ld> AS,AG;cin >> AS.x >> AS.y >> AG.x >> AG.y;
+        ld LT = sqrtl((TG.x-TS.x)*(TG.x-TS.x)+(TG.y-TS.y)*(TG.y-TS.y));
+        ld LA = sqrtl((AG.x-AS.x)*(AG.x-AS.x)+(AG.y-AS.y)*(AG.y-AS.y));
+        ld ax = (TG.x-TS.x)/LT - (AG.x-AS.x)/LA;
+        ld ay = (TG.y-TS.y)/LT - (AG.y-AS.y)/LA;
+        ld a = ax*ax+ay*ay;
+        ld cx = (TS.x-AS.x);
+        ld cy = (TS.y-AS.y);
+        ld b = 2*ax*cx + 2*ay*cy;
+        ld c = cx*cx + cy*cy;
+        ld Tf = min(LA,LT);
+        ld Ts = max(LA,LT);
+        ld dis = INF;
+        if(a > 0.0000000001 || -0.00000000001 > a){
+            ld m = -b/(2*a);
+            if(0<m && m < Tf){
+                chmin(dis, a*m*m+b*m+c);
             }
-            lazy[k][1] = 0;
         }
-        if (lazy[k][2] != 0) {
-            node[k][2] += lazy[k][2] * len;
-            if (r - l > 1) {
-                lazy[2 * k + 1][2] += lazy[k][2];
-                lazy[2 * k + 2][2] += lazy[k][2];
+        chmin(dis,c);
+        chmin(dis,a*Tf*Tf+b*Tf+c);
+        pair<ld,ld> E;
+        pair<ld,ld> ES, EG;
+        ld LE;
+        if(LA > LT){
+            E = TG;
+            ES = AS;
+            EG = AG;
+            LE = LA;
+        }
+        else{
+            E = AG;
+            ES = TS;
+            EG = TG;
+            LE = LT;
+        }
+        ax = -(EG.x-ES.x)/LE;
+        ay = -(EG.y-ES.y)/LE;
+        a = ax*ax + ay * ay;
+        cx = E.x - ES.x;
+        cy = E.y - ES.y;
+        b = 2*(ax*cx + ay*cy);
+        c = cx * cx + cy * cy;
+        if(a > 0.0000000001 || -0.00000000001 > a){
+            ld m = -b/(2*a);
+            if(Tf<m && m < Ts){
+                chmin(dis, a*m*m+b*m+c);
             }
-            lazy[k][2] = 0;
         }
-    }
-
-    void update(ll a, ll b, mint val, ll p, ll k = 0, ll l = 0, ll r = -1) {
-        if (r < 0) r = size;
-        eval(k, l, r);
-        if (r <= a || b <= l) return;
-        if (a <= l && r <= b) {
-            lazy[k][p] += val;
-            eval(k, l, r);
-        } 
-        else {
-            update(a, b, val, p, 2 * k + 1, l, (l + r) / 2);
-            update(a, b, val, p, 2 * k + 2, (l + r) / 2, r);
-            rep(i, 0, 3) { node[k][i] = node[2 * k + 1][i] + node[2 * k + 2][i]; }
+        chmin(dis,a*Ts*Ts+b*Ts+c);
+        if(dis < 0){
+            dis = 0;
         }
+        ans[_] = sqrtl(dis);
     }
-
-    mint query(ll a, ll b, ll k = 0, ll l = 0, ll r = -1) {
-        if (r < 0) r = size;
-
-        eval(k, l, r);
-
-        if (r <= a || b <= l) return 0;
-        if (a <= l && r <= b) return node[k][0];
-
-        mint vl = query(a, b, 2 * k + 1, l, (l + r) / 2);
-        mint vr = query(a, b, 2 * k + 2, (l + r) / 2, r);
-        return vl + vr;
+    rep(i,0,T){
+        cout << std::fixed << std::setprecision(15) << ans[i] << "\n";
     }
-};
-
-int main() {
-    ll N, Q;
-    cin >> N >> Q;
-    vector<pair<mint,mint>> In(N);
-    rep(i, 0, N) {
-        ll a;
-        cin >> a;
-        In[i].first = a;
-    }
-    rep(i, 0, N) {
-        ll b;
-        cin >> b;
-        In[i].second = b;
-    }
-    LazySegmentTree ST(In);
-    vector<mint> ans(0);
-
-    rep(_, 0, Q) {
-        ll q, l, r;
-        cin >> q >> l >> r;
-        l--;
-        if (q == 3) {
-            ans.push_back(ST.query(l, r));
-        } 
-        else {
-            ll x;
-            cin >> x;
-            mint xm = x;
-            ST.update(l, r, xm, q);
-        }
-    }
-    rep(i, 0, ans.size()) { cout << ans[i].val() << "\n"; }
 }
