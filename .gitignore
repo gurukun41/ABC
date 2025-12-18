@@ -36,3 +36,4 @@
 
 *.yml
 *.plist
+.DS_Store
