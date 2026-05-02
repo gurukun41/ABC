@@ -48,6 +48,43 @@ void yn(bool a) {
         cout << "No\n";
 }
 
+// 長さnの配列を入力
+template <typename T>
+vector<T> read_vector(int n) {
+    vector<T> a(n);
+    rep(i, 0, n) cin >> a[i];
+    return a;
+}
+
+// h*wの二次元配列を入力
+template <typename T>
+vector<vector<T>> read_matrix(int h, int w) {
+    vector<vector<T>> a(h, vector<T>(w));
+    rep(i, 0, h) rep(j, 0, w) cin >> a[i][j];
+    return a;
+}
+
+// 配列を1行で出力
+template <typename T>
+void print_vector(const vector<T> &v, string sep = " ", string end = "\n") {
+    rep(i, 0, v.size()) {
+        if (i) cout << sep;
+        cout << v[i];
+    }
+    cout << end;
+}
+
+// 配列を1要素1行で出力
+template <typename T>
+void print_lines(const vector<T> &v) {
+    for (const T &x : v) cout << x << "\n";
+}
+
+// (x,y)がh*wのグリッド内にあるか
+bool inside(int x, int y, int h, int w) {
+    return 0 <= x && x < h && 0 <= y && y < w;
+}
+
 int main(){
     ll N;
 }
