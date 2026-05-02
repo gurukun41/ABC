@@ -14,7 +14,7 @@ int main(){
     cout << "Apple price: " << m["apple"] << endl;
 
     // 存在確認: O(log N)
-    if (m.contains("cherry")) {
+    if (!m.contains("cherry")) {
         cout << "Cherry not found" << endl;
     }
 
