@@ -1,52 +1,98 @@
 #include <bits/stdc++.h>
 #include <atcoder/all>
-using ll = long long;
 using namespace std;
+using ll = long long;
 
-// --- 区間加算・区間最小値 (RAQ + RMQ) ---
+// ===== Lazy SegTree: 区間更新 + 区間取得 =====
+// 0-indexed / [l, r) / O(log N)
+// 使うときは S, F, op, e, mapping, composition, id を1組だけ残す。
+// composition(f, g): 古い操作 g の後に、新しい操作 f をする。
+
+// --- RAQ + RMQ: 区間加算 + 区間最小値 ---
 using S = ll;
 using F = ll;
-
-const S INF = 4e18;
-
 S op(S a, S b) { return min(a, b); }
-S e() { return INF; }
-S mapping(F f, S x) { return f + x; } // 遅延(f)を要素(x)に反映
-F composition(F f, F g) { return f + g; } // 遅延(f)を既存の遅延(g)に合成
-F id() { return 0; } // 何もしない遅延タグ
-
-
-/* --- Lazy SegTree 完全テンプレート ---
-// S: 配列の要素の型 (例: struct Node { ll val; int size; }; )
-// F: 操作(遅延)の型 (例: ll add_val;)
-using S = long long;
-using F = long long;
-
-// 1. 要素同士のマージ (区間取得の結果)
-S op(S a, S b) { return min(a, b); }
-
-// 2. 要素の単位元 (初期値や範囲外の値)
-S e() { return 4e18; }
-
-// 3. 要素(x)に操作(f)を適用する関数
-// ※ 区間和の区間加算なら、x.val += f * x.size になる点に注意
+S e() { return (1LL << 60); }
 S mapping(F f, S x) { return x + f; }
-
-// 4. 操作(g)に対して、さらに新しい操作(f)を合成する関数 (順序: g -> f)
-// 例: xにgを足して、さらにfを足す -> 結果として f+g を足す
 F composition(F f, F g) { return f + g; }
-
-// 5. 操作の単位元 (何もしない操作)
 F id() { return 0; }
+
+/* --- RAQ + RSQ: 区間加算 + 区間和 ---
+struct S {
+    ll sum;
+    int size;
+};
+using F = ll;
+S op(S a, S b) { return {a.sum + b.sum, a.size + b.size}; }
+S e() { return {0, 0}; }
+S mapping(F f, S x) { return {x.sum + f * x.size, x.size}; }
+F composition(F f, F g) { return f + g; }
+F id() { return 0; }
+
+vector<S> a(N);
+for (int i = 0; i < N; i++) {
+    ll x;
+    cin >> x;
+    a[i] = {x, 1};
+}
+atcoder::lazy_segtree<S, op, e, F, mapping, composition, id> seg(a);
+
+seg.apply(l, r, x);             // [l, r) に x を加算
+ll ans = seg.prod(l, r).sum;     // [l, r) の和
 */
 
-ll N,i,x,l,r;
+/* --- RUQ + RMQ: 区間代入 + 区間最小値 ---
+using S = ll;
+struct F {
+    ll x;
+    bool set;
+};
+S op(S a, S b) { return min(a, b); }
+S e() { return (1LL << 60); }
+S mapping(F f, S x) { return f.set ? f.x : x; }
+F composition(F f, F g) { return f.set ? f : g; }
+F id() { return {0, false}; }
 
-int main(){
-    // 宣言
-    atcoder::lazy_segtree<S, op, e, F, mapping, composition, id> seg(N);
+vector<S> a(N);
+for (int i = 0; i < N; i++) cin >> a[i];
+atcoder::lazy_segtree<S, op, e, F, mapping, composition, id> seg(a);
 
-    // 操作
-    seg.apply(l, r, x); // [l, r) に x を加算
-    seg.prod(l, r);     // [l, r) の最小値を取得
+seg.apply(l, r, {x, true});  // [l, r) を x に代入
+ll ans = seg.prod(l, r);     // [l, r) の最小値
+*/
+
+int main() {
+    int N, Q;
+    cin >> N >> Q;
+
+    vector<S> a(N);
+    for (int i = 0; i < N; i++) cin >> a[i];
+
+    atcoder::lazy_segtree<S, op, e, F, mapping, composition, id> seg(a);
+    // atcoder::lazy_segtree<S, op, e, F, mapping, composition, id> seg(N);
+
+    while (Q--) {
+        int type;
+        cin >> type;
+
+        if (type == 0) {
+            int l, r;
+            F x;
+            cin >> l >> r >> x;
+            seg.apply(l, r, x); // [l, r) に x を加算
+        }
+
+        if (type == 1) {
+            int i;
+            S x;
+            cin >> i >> x;
+            seg.set(i, x); // a[i] = x
+        }
+
+        if (type == 2) {
+            int l, r;
+            cin >> l >> r;
+            cout << seg.prod(l, r) << '\n'; // [l, r) の最小値
+        }
+    }
 }

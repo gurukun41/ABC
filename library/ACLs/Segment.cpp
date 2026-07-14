@@ -1,32 +1,67 @@
 #include <bits/stdc++.h>
 #include <atcoder/all>
-using ll = long long;
 using namespace std;
+using ll = long long;
 
-// --- 区間最小値 (RMQ) テンプレート ---
+// ===== SegTree: 1点更新 + 区間取得 =====
+// 0-indexed / [l, r) / O(log N)
+// 使うときは S, op, e を1組だけ残す。
+
+// --- RMQ: 区間最小値 ---
 using S = ll;
 S op(S a, S b) { return min(a, b); }
-S e() { return 4e18; } // 単位元 (INF: これ以上大きな値はない数)
+S e() { return (1LL << 60); }
 
-/* --- 区間和 (RSQ) テンプレート ---
+/* --- RMaxQ: 区間最大値 ---
+using S = ll;
+S op(S a, S b) { return max(a, b); }
+S e() { return -(1LL << 60); }
+*/
+
+/* --- RSQ: 区間和 ---
 using S = ll;
 S op(S a, S b) { return a + b; }
-S e() { return 0; } // 単位元 (足しても変わらない数)
+S e() { return 0; }
 */
 
-/* --- SegTree 汎用テンプレート ---
-using S = long long; // 扱うデータの型
-S op(S a, S b) { return ...; } // 左右の子をマージする処理 (min, max, +, gcd)
-S e() { return ...; } // 単位元 (minならINF, 和なら0, 積なら1)
+/* --- GCD ---
+using S = ll;
+S op(S a, S b) { return gcd(a, b); }
+S e() { return 0; }
 */
 
-ll N,i,x,l,r;
+int main() {
+    int N, Q;
+    cin >> N >> Q;
 
-int main(){
-    // 宣言
-    atcoder::segtree<S, op, e> seg(N); // または seg(vector<S> v);
+    vector<S> a(N);
+    for (int i = 0; i < N; i++) cin >> a[i];
 
-    // 操作
-    seg.set(i, x);    // i番目を x に更新
-    seg.prod(l, r);   // [l, r) の最小値
+    atcoder::segtree<S, op, e> seg(a);
+    // atcoder::segtree<S, op, e> seg(N); // 全要素 e() で初期化
+
+    while (Q--) {
+        int type;
+        cin >> type;
+
+        if (type == 0) {
+            int i;
+            S x;
+            cin >> i >> x;
+            seg.set(i, x); // a[i] = x
+        }
+
+        if (type == 1) {
+            int i;
+            S x;
+            cin >> i >> x;
+            seg.set(i, seg.get(i) + x); // a[i] += x
+        }
+
+        if (type == 2) {
+            int l, r;
+            cin >> l >> r;
+            cout << seg.prod(l, r) << '\n'; // [l, r)
+        }
+    }
 }
