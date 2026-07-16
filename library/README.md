@@ -7,7 +7,8 @@
 
 ## 直下
 
-- `base.cpp`: 共通テンプレート。`ll`, `vector` alias, `rep`, `all`, `chmax/chmin`, `yn`, 入出力補助, `inside(x,y,h,w)`
+- `base.cpp`: 共通テンプレート。`ll`, `vector` alias, `rep`, `all`, `chmax/chmin`, `yn`/`yns`, 再帰入力`scan`, pair/range出力`print`/`prints`, `inside(x,y,h,w)`
+- `base_usage.md`: `base.cpp` の各機能を忘れたときに見る使用例
 - `input.cpp`: `cin` から1つ読み込んで返す `input<T>()`
 - `isPrime.cpp`: 試し割りによる素数判定
 - `LazySegmentTree.cpp`: 自作遅延セグ木。区間加算・区間和、区間代入・区間最小値
@@ -21,6 +22,7 @@ STL や構文を忘れたときに見るメモ。
 - `lamda.cpp`: ラムダ式によるメモ化再帰
 - `map.cpp`: `map` の挿入、取得、存在確認、削除、走査
 - `multiset.cpp`: `multiset` の最小値・最大値、1個削除、全削除、`lower_bound`
+- `pair.cpp`: `pair` の構造化束縛、コピーと参照、`vector<pair>` の走査
 - `priority_queue.cpp`: 最大ヒープ、最小ヒープ、`push/top/pop`
 - `queue.cpp`: `queue` の `push/front/pop`
 - `set.cpp`: `set` の挿入、検索、`lower_bound`、削除、走査
