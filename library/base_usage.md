@@ -41,33 +41,55 @@ scan(flags);
 ## 出力
 
 ```cpp
+ll answer = 42;
+ll N = 3, M = 4;
+double ratio = 1.0 / 3.0;
+string message = "Yes";
 vl ans = {10, 20, 30};
+vl next = {40, 50};
 pl edge = {1, 2};
+vvl matrix = {{1, 2}, {3, 4}};
 
-print(edge);                // 1 2\n
-print(ans);                 // 10 20 30\n
-prints(ans);                // 10\n20\n30\n
-print(ans, ", ");           // 10, 20, 30\n
-print(ans, " ", "");        // 10 20 30（最後の改行なし）
+emit(answer);               // 42\n
+emit(ratio);                // 0.333333333333333\n
+emit(N, M);                 // 3 4\n
+emit(N, M, " ");            // 3 4\n
+emit(N, M, "\n");           // 3\n4\n
+emit(N, M, "");             // 34\n
+emit(N, M, message);        // 3 4 Yes\n
+emit(message);              // Yes\n
+emit(edge);                 // 1 2\n
+emit(ans);                  // 10 20 30\n
+emit(ans, next);            // 10 20 30 40 50\n
+emit(ans, next, "\n");      // 10\n20\n30\n40\n50\n
+emit(edge, ans);            // 1 2 10 20 30\n
+emit(matrix);               // 1 2 3 4\n
+emit(ans, "\n");            // 10\n20\n30\n
+emit(ans, ", ");            // 10, 20, 30\n
+emit(ans, " ", "");         // 10 20 30（最後の改行なし）
 
 vector<char> chars = {'a', 'b', 'c'};
-print(chars, "");           // abc\n
+emit(chars, "");            // abc\n
 vs words = {"At", "Coder"};
-print(words, "");           // AtCoder\n
+emit(words, "");            // AtCoder\n
 vs blocks = {"first\n", "second\n"};
-print(blocks, "", "");      // 要素内の改行だけを使って連結
+emit(blocks, "", "");       // 要素内の改行だけを使って連結
 ```
 
-- `print(xs, sep, end)`: 平坦なrangeを横に出力する。
-- `prints(xs)`: rangeの各要素を1行ずつ出力する。
-- 空rangeでは、`print` は `end` だけ、`prints` は何も出力しない。
-- `vector<pair>` や入れ子rangeは問題ごとの形式が違うため、自動展開しない。
-- 単一の数値や文字列は、これまでどおり `cout << x << '\n';` で出力する。
+- `emit(x, xs...)`: 各引数のpair・array・vectorを再帰的に展開し、末端の値を空白区切りで1行に出力する。
+- 3引数以上で末尾が `""`, `" "`, `"\n"` のいずれかなら、その末尾を値ではなく区切り文字として使う。
+- 上記の予約文字列は、3引数以上の `emit` では最後の出力値にできない。
+- 単一のpair・array・vectorでは `emit(xs, delimiter, end)` として任意の区切りと終端を指定できる。
+- `emit(xs, "\n")`: 再帰展開した末端の値を1行ずつ出力する。
+- `string` は文字ごとに展開せず、1つの値として出力する。
+- `float` / `double` / `long double` は、小数点以下15桁で出力する。変更した出力設定は呼び出し内で元に戻す。
+- 空のarray/vectorは値を出力しない。すべて空なら `end` だけを出力する。
+- `vector<pair>` や入れ子array/vectorも、構造を保たず末端の値まで平坦化する。
 
-行列をそのまま出す場合は、行ごとに `print` を呼ぶ。
+行列の行構造を保って出す場合は、行ごとに `emit` を呼ぶ。
 
 ```cpp
-for (const vl &row : grid) print(row);
+for (const vl &row : grid) emit(row);
 ```
 
 ## Yes / No
@@ -79,7 +101,7 @@ vb ok = {true, false, true};
 yns(ok);                    // Yes\nNo\nYes\n
 ```
 
-`prints(ok)` は `1/0` を出す。`Yes/No` が必要なら `yns(ok)` を使う。
+`emit(ok, "\n")` は `1/0` を出す。`Yes/No` が必要なら `yns(ok)` を使う。
 
 ## その他
 

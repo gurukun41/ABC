@@ -7,7 +7,7 @@
 
 ## 直下
 
-- `base.cpp`: 共通テンプレート。`ll`, `vector` alias, `rep`, `all`, `chmax/chmin`, `yn`/`yns`, 再帰入力`scan`, pair/range出力`print`/`prints`, `inside(x,y,h,w)`
+- `base.cpp`: 共通テンプレート。`ll`, `vector` alias, `rep`, `all`, `chmax/chmin`, `yn`/`yns`, 再帰入力`scan`, 複数値/pair/array/vectorの再帰出力`emit`（浮動小数点は15桁）, `inside(x,y,h,w)`
 - `base_usage.md`: `base.cpp` の各機能を忘れたときに見る使用例
 - `input.cpp`: `cin` から1つ読み込んで返す `input<T>()`
 - `isPrime.cpp`: 試し割りによる素数判定
