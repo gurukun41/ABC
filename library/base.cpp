@@ -20,40 +20,6 @@ using vpl = vector<pl>;                                  // long long型のペ�
 #define rep(i, a, b) for (ll i = (a); i < (ll)(b); i++)  // for文の短縮
 #define all(v) v.begin(), v.end()                        // all(v)でvの始まりと終わりのイテレーター
 
-// a,bのうち最大のものをaに入れる(aがbに置き換わるときはtrueを返す)
-template <typename T>
-inline bool chmax(T &a, const T &b) {
-    if (a < b) {
-        a = b;
-        return true;
-    }
-    return false;
-}
-
-// a,bのうち最小のものをaに入れる(aがbに置き換わるときはtrueを返す)
-template <typename T>
-inline bool chmin(T &a, const T &b) {
-    if (a > b) {
-        a = b;
-        return true;
-    }
-    return false;
-}
-
-// Yes/Noを出力
-void yn(bool a) {
-    if (a)
-        cout << "Yes\n";
-    else
-        cout << "No\n";
-}
-
-// rangeの各真偽値をYes/Noで1行ずつ出力
-template <typename Range>
-void yns(const Range &xs) {
-    for (const auto &x : xs) yn(x);
-}
-
 // 複数の値や、確保済みのpair・array・vectorを再帰的に入力
 struct Scanner {
     template <typename T>
@@ -90,8 +56,6 @@ struct Scanner {
         (read(xs), ...);
     }
 };
-
-inline constexpr Scanner scan{};
 
 // 複数の値や、pair・array・vectorを再帰的に出力
 struct Emitter {
@@ -198,7 +162,39 @@ struct Emitter {
     }
 };
 
+inline constexpr Scanner scan{};
 inline constexpr Emitter emit{};
+
+// a,bのうち最大のものをaに入れる(aがbに置き換わるときはtrueを返す)
+template <typename T>
+inline bool chmax(T &a, const T &b) {
+    if (a < b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
+// a,bのうち最小のものをaに入れる(aがbに置き換わるときはtrueを返す)
+template <typename T>
+inline bool chmin(T &a, const T &b) {
+    if (a > b) {
+        a = b;
+        return true;
+    }
+    return false;
+}
+
+// rangeの各真偽値をYes/Noで1行ずつ出力
+template <typename Range>
+void yns(const Range &xs) {
+    for (const auto &x : xs) cout << (x ? "Yes\n" : "No\n");
+}
+
+// Yes/Noを出力
+void yn(bool a) {
+    cout << (a ? "Yes\n" : "No\n");
+}
 
 // (x,y)がh*wのグリッド内にあるか
 bool inside(int x, int y, int h, int w) {
